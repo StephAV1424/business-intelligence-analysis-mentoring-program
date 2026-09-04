@@ -1,0 +1,20 @@
+Strengths:
+ 
+SQL and Data Transformation: Comfortable writing intermediate SQL queries using aggregations, window functions (PARTITION BY, ROW_NUMBER), and CTEs; capable of building silver-to-gold pipelines in Databricks
+BI Tooling: Hands-on experience with Tableau and other BI tools, familiarity with report modeling and dashboard creation
+Stakeholder Engagement: Participates in requirements gathering meetings, uses intake forms, and understands the importance of aligning deliverables with business needs
+Agile Awareness: Works within Scrum framework, understands sprints, story points, and backlog management in Jira
+Adaptability and Communication: Demonstrates adequate English proficiency, shows willingness to learn, and adapts to new tools and projects effectively
+ 
+Weaknesses:
+ 
+Data Warehousing Fundamentals: Lacks understanding of OLTP vs OLAP, star and snowflake schemas, fact and dimension tables, and other general concepts critical to BIA role
+Data Modeling: Cannot differentiate between conceptual, logical, and physical data models she had good instincts on where to use them after explained, but other than understanding the definitions she was unable to provide strong evidence of modelling experience.
+Data Quality and Validation: Missing knowledge of business-rule-based data quality checks (e.g., referential integrity, domain validation, uniqueness); focus is mostly on structural checks (nulls, data types) and mostly experience based knowledge no clear structured approach
+BA Methodologies and Artifacts: No formal training or study on elicitation techniques, requirements lifecycle management, solution assessment, or use of BA artifacts like MVPs, prototypes, or wireframes; mostly reactive rather than proactive in her approach, talking about things that has happened to her instead of how she would approach the situations presented.
+Risk and Project Management: Vague understanding of risk identification and mitigation strategies; unclear on prioritization frameworks and estimation techniques beyond basic disaggregation
+
+
+Recomendations
+ 
+Stephanie has more than sufficient hands-on experience and practical exposure for a BIA A2 role, but her lack of formal training and theoretical grounding in core BI and BA disciplines creates a significant gap that will hinder her ability to meet EPAM's A2 standard independently. She requires structured, mentor-backed training focused on data warehousing fundamentals (dimensional modeling, OLAP vs OLTP, star/snowflake schemas, SCD types), data modeling principles (conceptual/logical/physical models, normalization), business analysis techniques (elicitation, requirements management, solution validation),  data quality frameworks and some other skills explained on the BIA skill matrix. I strongly recommend she invest 2–3 months in guided learning with a mentor, supplemented by certifications or structured courses (e.g., learn platform BIA learning path). After this training period, she should either undergo another technical interview to validate her progress or apply directly for the BIA A2 assessment if her mentor confirms readiness. With the right support, Stephanie has the potential to become a strong BIA A2 contributor.
