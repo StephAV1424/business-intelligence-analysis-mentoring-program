@@ -19,3 +19,7 @@ Requirements gathering, stakeholder analysis, user stories, epics and use cases.
 ### Requirements in Data Projects
 
 Business Intelligence specific requirements lifecycle, data requirements, governance considerations and traceability practices.
+
+### Requirements Documentation
+
+Requirements documentation standards and modeling techniques, including SRS, BRD, BRS, URS, data models, context diagrams, decision tables and data flow diagrams.
