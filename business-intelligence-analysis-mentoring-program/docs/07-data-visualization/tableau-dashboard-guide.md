@@ -1,37 +1,41 @@
-# Tableau – Pasos para crear el Sales Dashboard
+# Tableau – Sales Dashboard Build Guide
 **BIA Mentoring Program | Module 10 | Stephanie Arredondo**
 
 ---
 
-## Antes de empezar
-Descarga **Tableau Public** (gratis): https://public.tableau.com/app/discover
-Tienes dos archivos CSV para cargar:
-- `sales_transactions.csv` — 209 transacciones (Jan–Sep 2026)
-- `sales_targets.csv` — Cuotas mensuales por rep
+## Before You Start
+
+Download **Tableau Public** (free): https://public.tableau.com/app/discover
+
+You will need two CSV files:
+- `sales_transactions.csv` — 209 transactions (Jan–Sep 2026)
+- `sales_targets.csv` — Monthly quotas per sales rep
+
+Both files are available in the [`/data`](../../data/) folder.
 
 ---
 
-## Paso 1 – Conectar los datos
+## Step 1 – Connect the Data
 
-1. Abre Tableau Public → **Connect to Data** → **Text File**
-2. Selecciona `sales_transactions.csv`
-3. En el panel **Data Source**, arrastra también `sales_targets.csv` al área de unión
-4. Une las tablas:
-   - Clic en el join entre tablas → tipo: **Left Join**
-   - Join condition: `RepID = RepID` y `PeriodDate ≈ SaleDate` (month match)
-   - *Alternativa más fácil:* mantenerlas separadas y crear dos fuentes de datos en Tableau
-5. Verifica que los campos estén bien tipados:
+1. Open Tableau Public → **Connect to Data** → **Text File**
+2. Select `sales_transactions.csv`
+3. In the **Data Source** panel, drag `sales_targets.csv` into the join area
+4. Configure the join:
+   - Click the join icon between tables → type: **Left Join**
+   - Join condition: `RepID = RepID` and `PeriodDate ≈ SaleDate` (month-level match)
+   - **Recommended alternative:** keep them as separate data sources and use a Tableau Relationship instead of a physical join to avoid row inflation
+5. Verify field types:
    - `SaleDate` → Date
    - `Amount`, `TargetAmount` → Number (decimal)
    - `Region`, `RepName`, `Category` → String
 
 ---
 
-## Paso 2 – Crear campos calculados
+## Step 2 – Create Calculated Fields
 
-Antes de construir vistas, crea estos campos en **Analysis → Create Calculated Field**:
+Before building any views, create the following fields under **Analysis → Create Calculated Field**:
 
-| Campo | Fórmula |
+| Field | Formula |
 |-------|---------|
 | **Quota Attainment %** | `SUM([Amount]) / SUM([TargetAmount])` |
 | **Month-Year** | `DATETRUNC('month', [SaleDate])` |
@@ -40,64 +44,61 @@ Antes de construir vistas, crea estos campos en **Analysis → Create Calculated
 
 ---
 
-## Paso 3 – Crear las 4 visualizaciones (Sheets)
+## Step 3 – Build the 4 Worksheets
 
 ### Sheet 1 – KPI Cards (Total Revenue, Deals Closed, Quota %)
-1. Nueva hoja → renombrar "KPI Cards"
-2. Arrastra `Amount` a **Text** en el Marks card
-3. Cambia el chart type a **Text**
-4. Haz click derecho en Amount → **Quick Table Calculation → Running Total** (no, solo SUM)
-5. Crea una para cada KPI:
-   - `SUM(Amount)` → formato moneda
-   - `COUNT(TransactionID)` → formato número entero
-   - `Quota Attainment %` → formato porcentaje
-6. Usa **Show Me → Text Table** para mostrarlos como tarjetas
-7. Para el estilo de "card": Format → Shading → fondo blanco, bordes gris claro
+1. New sheet → rename to "KPI Cards"
+2. Change chart type to **Text**
+3. Create one text mark per KPI:
+   - `SUM(Amount)` → format as currency
+   - `COUNT(TransactionID)` → format as integer
+   - `Quota Attainment %` → format as percentage
+4. For the card style: **Format → Shading** → white background, light gray border
 
-### Sheet 2 – Revenue by Region (Bar chart)
-1. Nueva hoja → "Revenue by Region"
-2. Arrastra `Region` a **Columns**
-3. Arrastra `Amount` (SUM) a **Rows**
+### Sheet 2 – Revenue by Region (Bar Chart)
+1. New sheet → rename to "Revenue by Region"
+2. Drag `Region` to **Columns**
+3. Drag `Amount` (SUM) to **Rows**
 4. Chart type: **Bar**
-5. Arrastra `Region` a **Color** en Marks
-   - North: azul marino `#1B4F8A`
-   - South: azul medio `#2E86C1`
-   - West: azul claro `#5DADE2`
-6. Agrega `SUM(Amount)` en **Label** → mostrar en top de cada barra
-7. Ordena de mayor a menor: clic en eje → Sort → Descending
+5. Drag `Region` to **Color** in Marks:
+   - North: Navy `#1B4F8A`
+   - South: Medium Blue `#2E86C1`
+   - West: Light Blue `#5DADE2`
+6. Add `SUM(Amount)` to **Label** → display at top of each bar
+7. Sort descending: click the axis → Sort → Descending
 
-### Sheet 3 – Monthly Sales Trend (Line chart)
-1. Nueva hoja → "Sales Trend"
-2. Arrastra `SaleDate` a **Columns** → clic derecho → **Month (continuous)**
-3. Arrastra `Amount` (SUM) a **Rows**
+### Sheet 3 – Monthly Sales Trend (Line Chart)
+1. New sheet → rename to "Sales Trend"
+2. Drag `SaleDate` to **Columns** → right-click → **Month (continuous)**
+3. Drag `Amount` (SUM) to **Rows**
 4. Chart type: **Line**
-5. Opcional: arrastra `Region` a **Color** para ver líneas por región
-6. Agrega una **Reference Line**: Analytics pane → Reference Line → Average
-7. Color de línea: `#1B4F8A`, grosor 2px
+5. Optional: drag `Region` to **Color** to show separate lines per region
+6. Add a **Reference Line**: Analytics pane → Reference Line → Average
+7. Line color: `#1B4F8A`, thickness 2px
 
-### Sheet 4 – Top Reps Ranking (Bar horizontal)
-1. Nueva hoja → "Top 5 Reps"
-2. Arrastra `RepName` a **Rows**
-3. Arrastra `Amount` (SUM) a **Columns**
-4. Chart type: **Bar** → cambiar a horizontal (Swap Rows/Columns)
-5. Arrastra `Performance Flag` a **Color**:
-   - "On Target" → verde `#27AE60`
-   - "Below Target" → rojo `#E74C3C`
-6. Ordena por SUM(Amount) descendente
-7. Filtra Top 5: clic derecho en RepName → Filter → Top 5 by SUM(Amount)
-8. Agrega `SUM(Amount)` en **Label**
+### Sheet 4 – Top Reps Ranking (Horizontal Bar)
+1. New sheet → rename to "Top 5 Reps"
+2. Drag `RepName` to **Rows**
+3. Drag `Amount` (SUM) to **Columns**
+4. Chart type: **Bar** → swap rows/columns to make it horizontal
+5. Drag `Performance Flag` to **Color**:
+   - "On Target" → Green `#27AE60`
+   - "Below Target" → Red `#E74C3C`
+6. Sort by SUM(Amount) descending
+7. Filter to Top 5: right-click `RepName` → Filter → Top 5 by SUM(Amount)
+8. Add `SUM(Amount)` to **Label**
 
 ---
 
-## Paso 4 – Crear el Dashboard
+## Step 4 – Build the Dashboard
 
-1. Clic en el ícono de Dashboard (parte inferior) → **New Dashboard**
-2. Tamaño: **Fixed size → 1200 x 800** (o "Automatic")
-3. Arrastra las sheets al canvas en este orden:
+1. Click the Dashboard icon at the bottom → **New Dashboard**
+2. Size: **Fixed → 1200 × 800** (or "Automatic")
+3. Drag sheets onto the canvas in this layout:
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  FILTROS: Time Period │ Region │ Sales Rep           │
+│  FILTERS: Time Period │ Region │ Sales Rep           │
 ├───────────┬───────────┬───────────┬─────────────────┤
 │ Total     │ Deals     │ Quota     │ Avg Revenue     │
 │ Revenue   │ Closed    │ Attain %  │ per Rep         │
@@ -109,47 +110,46 @@ Antes de construir vistas, crea estos campos en **Analysis → Create Calculated
 └─────────────────────────────────────────────────────┘
 ```
 
-4. Para los **filtros globales**:
-   - Clic en cualquier chart → filtro de Time Period → "Apply to Worksheets → All Using This Data Source"
-   - Repite con Region y RepName
+4. Set up **global filters**:
+   - Click any chart → add a Time Period filter → "Apply to Worksheets → All Using This Data Source"
+   - Repeat for Region and RepName
 
 ---
 
-## Paso 5 – Aplicar formato profesional
+## Step 5 – Apply Professional Formatting
 
-| Elemento | Configuración |
-|----------|--------------|
-| Fuente general | Tableau Book o Arial, 11pt |
-| Título del dashboard | Bold, 16pt, color `#1B4F8A` |
-| Fondo de sheets | Blanco (`#FFFFFF`) |
-| Bordes de sheets | Gris claro, 1px |
-| Padding entre sheets | 8px |
-| Tooltips | Activados — describe el dato en lenguaje de negocio |
-| Colores | Azul marino para "On Target", rojo para "Below Target" |
+| Element | Setting |
+|---------|---------|
+| General font | Tableau Book or Arial, 11pt |
+| Dashboard title | Bold, 16pt, color `#1B4F8A` |
+| Sheet backgrounds | White (`#FFFFFF`) |
+| Sheet borders | Light gray, 1px |
+| Padding between sheets | 8px |
+| Tooltips | Enabled — describe data in business language |
+| Colors | Navy for "On Target", red for "Below Target" |
 
-**Regla de oro:** cada elemento del dashboard debe responder a una pregunta de James.
-Antes de publicar pregúntate: *"¿Es este elemento necesario?"*
+**Design rule:** every element on the dashboard must answer a question for James. Before publishing, ask yourself: *"Is this element necessary?"*
 
 ---
 
-## Paso 6 – Publicar y entregar
+## Step 6 – Publish and Submit
 
 1. **File → Save to Tableau Public**
-2. Inicia sesión con tu cuenta gratuita en public.tableau.com
-3. El dashboard queda en línea con una URL pública → esa URL es tu entrega
-4. Copia la URL y adjúntala en el formulario del módulo
+2. Sign in with your free account at public.tableau.com
+3. The dashboard will be live at a public URL → that URL is your submission
+4. Copy the URL and attach it in the module submission form
 
 ---
 
-## Checklist de evaluación (Module 10)
+## Evaluation Checklist (Module 10)
 
-- [ ] Todas las KPIs definidas en Module 4 están visibles
-- [ ] Filtros de Region, Time Period y Sales Rep funcionan
-- [ ] Colores comunican estado (verde = target met, rojo = below)
-- [ ] Sin jargon técnico en etiquetas
-- [ ] Tooltips descriptivos en cada chart
-- [ ] Layout coincide con el wireframe
-- [ ] Dashboard carga en menos de 5 segundos
+- [ ] All KPIs defined in Module 4 are visible
+- [ ] Region, Time Period, and Sales Rep filters work
+- [ ] Colors communicate status (green = on target, red = below target)
+- [ ] No technical jargon in labels — business language only
+- [ ] Descriptive tooltips on every chart
+- [ ] Layout matches the wireframe
+- [ ] Dashboard loads in under 5 seconds
 
 ---
 
